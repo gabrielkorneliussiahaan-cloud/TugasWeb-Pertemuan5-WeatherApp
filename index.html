@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App — Tugas Rutin 5</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+
+    <!--
+      ====================================================================
+      TUGAS RUTIN 5 — WEATHER APP (OpenWeatherMap API)
+      Ketentuan yang dipenuhi (lihat juga komentar REQUIREMENT di app.js):
+      1. ES6+ (const, arrow function, template literals) -> seluruh app.js
+      2. async/await + Fetch API   -> fetchCurrentWeather(), fetchForecast()
+      3. Minimal 1 array method    -> .filter() & .map() & .reduce() di app.js
+      4. Data wajib: kota, suhu, deskripsi, ikon, kelembaban -> renderWeather()
+      5. Loading state             -> setLoading()
+      6. Error handling (404 & network error) -> blok try/catch di app.js
+      7. UI responsif (mobile-friendly) -> style.css
+
+      BONUS yang dikerjakan:
+      - Riwayat pencarian lewat LocalStorage
+      - Toggle satuan °C / °F
+      - Forecast 5 hari ke depan
+
+      CARA MENGISI API KEY:
+      Buka app.js, cari CONFIG.apiKey di paling atas, ganti dengan API
+      key OpenWeatherMap kamu sendiri (gratis di openweathermap.org/api).
+      ====================================================================
+    -->
+  </head>
+  <body>
+    <div class="app">
+      <header class="app__header">
+        <div>
+          <p class="app__eyebrow">Tugas Rutin 5</p>
+          <h1 class="app__title">Weather App</h1>
+        </div>
+        <button
+          id="unitToggle"
+          class="unit-toggle"
+          type="button"
+          aria-pressed="false"
+        >
+          °C
+        </button>
+      </header>
+
+      <form id="searchForm" class="search-bar" autocomplete="off">
+        <input
+          id="cityInput"
+          class="search-bar__input"
+          type="text"
+          placeholder="Cari nama kota... (mis. Medan, Jakarta, Tokyo)"
+          aria-label="Nama kota"
+          required
+        />
+        <button class="search-bar__button" type="submit">Cari</button>
+      </form>
+
+      <!-- Bonus: riwayat pencarian -->
+      <div id="historyWrap" class="history">
+        <div class="history__head">
+          <span class="history__label">Pencarian terakhir</span>
+          <button id="clearHistory" class="history__clear" type="button">
+            Hapus
+          </button>
+        </div>
+        <div id="historyList" class="history__list"></div>
+      </div>
+
+      <!-- Loading state -->
+      <div id="loadingState" class="state state--loading" hidden>
+        <div class="spinner" aria-hidden="true"></div>
+        <p>Mengambil data cuaca...</p>
+      </div>
+
+      <!-- Error state -->
+      <div id="errorState" class="state state--error" role="alert" hidden>
+        <span class="state__icon">⚠️</span>
+        <p id="errorMessage">Terjadi kesalahan.</p>
+      </div>
+
+      <!-- Kartu cuaca utama -->
+      <section id="weatherCard" class="weather-card" hidden>
+        <div class="weather-card__main">
+          <div>
+            <p class="weather-card__location" id="cityName">—</p>
+            <p class="weather-card__desc" id="weatherDesc">—</p>
+          </div>
+          <img id="weatherIcon" class="weather-card__icon" src="" alt="" />
+        </div>
+
+        <p class="weather-card__temp" id="tempValue">—°</p>
+        <p class="weather-card__feels">
+          Terasa seperti <span id="feelsLikeValue">—°</span>
+        </p>
+
+        <div class="weather-card__stats">
+          <div class="stat">
+            <span class="stat__label">Kelembaban</span>
+            <span class="stat__value" id="humidityValue">—%</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label">Angin</span>
+            <span class="stat__value" id="windValue">— m/s</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label">Tekanan</span>
+            <span class="stat__value" id="pressureValue">— hPa</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bonus: forecast 5 hari -->
+      <section id="forecastSection" class="forecast" hidden>
+        <h2 class="forecast__title">Perkiraan 5 Hari</h2>
+        <div id="forecastList" class="forecast__list"></div>
+      </section>
+
+      <!-- Kondisi awal sebelum ada pencarian -->
+      <div id="emptyState" class="state state--empty">
+        <span class="state__icon">🌤️</span>
+        <p>Cari nama kota untuk melihat cuacanya di sini.</p>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
